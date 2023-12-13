@@ -3,42 +3,43 @@
 /**
  * exec_cmd - executes a command
  * description: takes command as argument and executes it
- * @command: command to be executed
+ * @args: command to be executed
  *
  * Return: void
  */
-void exec_cmd(char *command)
+
+void exec_cmd(char **args)
 {
 	pid_t pid;
 	int status;
 
+	if (args[0] == NULL)/*if no command is entered */
+	{
+		return;
+	}
+	if (_strcmp(args[0], "exit") == 0)/* check for builtin exit */
+	{
+		free_args(args);
+		exit_simple_shell();
+	}
+	if (access(args[0], X_OK) == -1)/* check if command is in PATH */
+	{
+		fprintf(stderr, "%s: command not found\n", args[0]);
+		return;
+	}
 	/* create a child process */
 	pid = fork();
 	if (pid == 0)
 	{
-		/* execute command by calling the execve system call */
-		char **cmd_argv = malloc(sizeof(char *) * 2);
-
-		if (cmd_argv == NULL)
+		if (execve(args[0], args, environ) == -1)/* execute using execve */
 		{
-			perror("no command found");
+			perror("failed to execute command");
 			exit(EXIT_FAILURE);
 		}
-		cmd_argv[0] = command;
-		cmd_argv[1] = NULL;
-		if (execve(command, cmd_argv, environ) == -1)
-		{
-			perror("simple shell");
-			exit(EXIT_FAILURE);
-		}
-		free(cmd_argv);
-	}
-	else if (pid < 0)
+	} else if (pid < 0)
 	{
-		/* error creating child process */
-		perror("error executing command");
-	}
-	else
+		perror("error creating child process");
+	} else
 	{
 		/* wait for child to finish */
 		do {

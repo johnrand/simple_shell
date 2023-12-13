@@ -11,6 +11,7 @@
 int main(void)
 {
 	char *line_to_read;
+	char **args;
 	int status = 1; /* default for loop continuation */
 
 	do {
@@ -27,13 +28,14 @@ int main(void)
 		/* remove newline character */
 		line_to_read[strcspn(line_to_read, "\n")] = '\0';
 
+		args = parse_command_with_args(line_to_read);
 		/* execute command */
-		if (_strlen(line_to_read) > 0)
+		if (args != NULL && args[0] != NULL)
 		{
-			exec_cmd(line_to_read);
+			exec_cmd(args);
 		}
 
-		free(line_to_read);
+		free_args(args);
 	} while (status);
 
 	return (EXIT_SUCCESS);

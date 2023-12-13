@@ -9,7 +9,7 @@
 
 void prompt_user(void)
 {
-	char *prompt = "SimpleShell $ ";
+	char *prompt = "R&JShell:$ ";
 	size_t length_of_prompt = _strlen(prompt);
 	size_t i;
 
