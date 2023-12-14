@@ -30,6 +30,8 @@ void free_args(char **args);
 
 void exit_simple_shell();
 
+char *handle_path(const char *command);
+
 int _strcmp(char *s1, char *s2);
 
 #endif /* MAIN_h */

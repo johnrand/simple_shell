@@ -4,6 +4,9 @@
 
 /**
  * main - Entry point of the program
+ * @argc: the number of arguments parsed
+ * @argv: argument vector
+ * @envp: environment varible
  *
  * Return: Always (0) succes
  */
@@ -12,10 +15,15 @@ int main(void)
 {
 	char *line_to_read;
 	char **args;
-	int status = 1; /* default for loop continuation */
+	int interactive = 0, status = 1; /* default for loop continuation */
+	
+	interactive = (isatty(STDIN_FILENO));
 
 	do {
-		prompt_user();
+		if (interactive == 1)
+		{
+			prompt_user();
+		}
 		line_to_read = read_command_line();
 
 		/* EOF handling */

@@ -12,6 +12,7 @@ void exec_cmd(char **args)
 {
 	pid_t pid;
 	int status;
+	char *path;
 
 	if (args[0] == NULL)/*if no command is entered */
 	{
@@ -22,28 +23,29 @@ void exec_cmd(char **args)
 		free_args(args);
 		exit_simple_shell();
 	}
-	if (access(args[0], X_OK) == -1)/* check if command is in PATH */
+	path = handle_path(args[0]);
+	if (path != NULL)/* check if command is in PATH */
 	{
-		fprintf(stderr, "%s: command not found\n", args[0]);
-		return;
-	}
-	/* create a child process */
-	pid = fork();
-	if (pid == 0)
-	{
-		if (execve(args[0], args, environ) == -1)/* execute using execve */
+		pid = fork();
+		if (pid == 0)
 		{
-			perror("failed to execute command");
-			exit(EXIT_FAILURE);
+			if (execve(path, args, environ) == -1)/* execute using execve */
+			{
+				perror("failed to execute command");
+				exit(EXIT_FAILURE);
+			}
+		} else if (pid < 0)
+		{
+			perror("error creating child process");
+		} else
+		{
+			do {
+				waitpid(pid, &status, WUNTRACED);
+			} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 		}
-	} else if (pid < 0)
-	{
-		perror("error creating child process");
+		free(path);
 	} else
 	{
-		/* wait for child to finish */
-		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		fprintf(stderr, "%s: command not found\n", args[0]);
 	}
 }
