@@ -28,7 +28,7 @@ char **parse_command_with_args(const char *command);
 
 void free_args(char **args);
 
-void exit_simple_shell();
+void exit_simple_shell(void);
 
 char *handle_path(const char *command);
 
