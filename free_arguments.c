@@ -2,6 +2,7 @@
 
 /**
  * free_args - frees the memory allocated dynamically
+ * @args: freed arguments
  * for the aguments
  *
  * Return: void

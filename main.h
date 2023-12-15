@@ -34,4 +34,6 @@ char *handle_path(const char *command);
 
 int _strcmp(char *s1, char *s2);
 
+char *my_getline(void);
+
 #endif /* MAIN_h */

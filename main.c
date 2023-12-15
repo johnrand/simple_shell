@@ -4,9 +4,6 @@
 
 /**
  * main - Entry point of the program
- * @argc: the number of arguments parsed
- * @argv: argument vector
- * @envp: environment varible
  *
  * Return: Always (0) succes
  */
@@ -16,7 +13,7 @@ int main(void)
 	char *line_to_read;
 	char **args;
 	int interactive = 0, status = 1; /* default for loop continuation */
-	
+
 	interactive = (isatty(STDIN_FILENO));
 
 	do {
@@ -44,6 +41,7 @@ int main(void)
 		}
 
 		free_args(args);
+		free(line_to_read);
 	} while (status);
 
 	return (EXIT_SUCCESS);

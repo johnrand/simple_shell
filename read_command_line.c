@@ -22,6 +22,8 @@ char *read_command_line(void)
 		free(line_to_read);
 		return (NULL);
 	}
+	/* remove newline character */
+	line_to_read[strcspn(line_to_read, "\n")] = '\0';
 
 	return (line_to_read);
 }

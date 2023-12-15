@@ -22,8 +22,10 @@ char *handle_path(const char *command)
 		exit(EXIT_FAILURE);
 	}
 	token = strtok(path_copy, ":");
+	full_path = NULL;
 	while (token != NULL)
 	{/* Construct the full path by appending the command to the directory */
+		free(full_path);
 		full_path = malloc(strlen(token) + strlen(command) + 2);
 		if (full_path == NULL)
 		{
@@ -37,8 +39,6 @@ char *handle_path(const char *command)
 			free(path_copy);
 			return (full_path);
 		}
-
-		free(full_path);
 		token = strtok(NULL, ":");
 	}
 	free(path_copy);
