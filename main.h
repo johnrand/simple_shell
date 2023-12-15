@@ -36,4 +36,6 @@ int _strcmp(char *s1, char *s2);
 
 char *my_getline(void);
 
+void print_enviroment(void);
+
 #endif /* MAIN_h */
